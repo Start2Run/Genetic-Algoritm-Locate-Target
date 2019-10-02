@@ -12,7 +12,7 @@ namespace GeneticAlgorithm
         private static void Main(string[] args)
         {
             var chromosomeMem = 3; // problem dimension = number genes
-            var target = new Genome(chromosomeMem) { Genes = new [] { 4.2, -2.5, 8 } };
+            var target = new Genome(chromosomeMem) { Genes = new [] { 5.0, 5.0, 5.0 } };
 
             var popSize = 31;
             var minX = -1.0; // aka minGene, maxGene

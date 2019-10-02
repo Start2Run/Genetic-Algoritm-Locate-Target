@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticAlgoritm", "GeneticAlgoritm\GeneticAlgoritm.csproj", "{FB8E280A-52F1-4A6C-8343-930D5F9004E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionOptimization", "EvolutionOptimization\EvolutionOptimization.csproj", "{22C01B00-5D06-428E-ADC6-2EC33379E504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer3D", "Viewer3D\Viewer3D.csproj", "{F988D280-551A-4A69-AEB2-28517172FE95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +19,19 @@ Global
 		{FB8E280A-52F1-4A6C-8343-930D5F9004E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB8E280A-52F1-4A6C-8343-930D5F9004E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB8E280A-52F1-4A6C-8343-930D5F9004E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C01B00-5D06-428E-ADC6-2EC33379E504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C01B00-5D06-428E-ADC6-2EC33379E504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C01B00-5D06-428E-ADC6-2EC33379E504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C01B00-5D06-428E-ADC6-2EC33379E504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F988D280-551A-4A69-AEB2-28517172FE95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F988D280-551A-4A69-AEB2-28517172FE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F988D280-551A-4A69-AEB2-28517172FE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F988D280-551A-4A69-AEB2-28517172FE95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F96E8D41-1AEB-473D-8976-C4B16EA29DDC}
 	EndGlobalSection
 EndGlobal

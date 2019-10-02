@@ -4,3 +4,10 @@ c:\users\mihaivs\documents\visual studio 2015\Projects\GeneticAlgoritm\GeneticAl
 c:\users\mihaivs\documents\visual studio 2015\Projects\GeneticAlgoritm\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.exe
 c:\users\mihaivs\documents\visual studio 2015\Projects\GeneticAlgoritm\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.pdb
 C:\Users\mihaivs\Documents\Visual Studio 2015\Projects\GeneticAlgoritm\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.csprojResolveAssemblyReference.cache
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.exe.config
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.exe
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.pdb
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.csprojAssemblyReference.cache
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.csproj.CoreCompileInputs.cache
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.exe
+D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.pdb
