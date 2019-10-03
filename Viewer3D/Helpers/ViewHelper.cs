@@ -18,21 +18,19 @@ namespace Viewer3D.Helpers
             return targetPoint;
         }
 
-        public static LinesVisual3D AddLine(IIndividual item, Point3D startPoint, Point3D targetPoint, Color color)
+        public static TubeVisual3D AddLine(IIndividual item, Point3D startPoint, Point3D targetPoint, Color color)
         {
-            var line = new LinesVisual3D { Color = color, Thickness = 1 };
-
-            Point3D lastPoint= startPoint;
-            //line.Points.Add(lastPoint);
+            var points = new Point3DCollection();
+            var lastPoint = startPoint;
             foreach (var chromosome in item.Chromosome)
             {
                 double x = 0;
                 double y = 0;
                 double z = 0;
-                line.Points.Add(lastPoint);
+                points.Add(lastPoint);
                 if (chromosome.Genes.Length > 0)
                 {
-                    x = chromosome.Genes[0]+lastPoint.X;
+                    x = chromosome.Genes[0] + lastPoint.X;
                 }
 
                 if (chromosome.Genes.Length > 1)
@@ -44,11 +42,16 @@ namespace Viewer3D.Helpers
                 {
                     z = chromosome.Genes[2] + lastPoint.Z;
                 }
+
                 lastPoint = new Point3D(x, y, z);
-                line.Points.Add(lastPoint);
+                points.Add(lastPoint);
             }
 
-            return line;
+            return new TubeVisual3D
+            {
+                Material = MaterialHelper.CreateMaterial(null, new SolidColorBrush(color), Brushes.White, 0.5, 40),
+                Diameter = 0.05, Path = points
+            };
         }
     }
 }

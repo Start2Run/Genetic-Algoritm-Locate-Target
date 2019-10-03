@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using EvolutionOptimization.Helpers;
 using EvolutionOptimization.Interfaces;
@@ -24,10 +25,11 @@ namespace EvolutionOptimization.Managers
             _refError = perfectIndividual.Error;
         }
 
-        public async Task<IIndividual> Solver()
+        public async Task<IIndividual> Solver(CancellationToken token)
         {
             return await Task.Run(() =>
             {
+                token.ThrowIfCancellationRequested();
                 // assumes existence of an accessible Error function and a Individual class and a Random object rnd
                 var population = new IIndividual[Configuration.PopSize];
                 IIndividual bestSolution = null; // best solution found by any individual
@@ -47,6 +49,12 @@ namespace EvolutionOptimization.Managers
                 bool done = false;
                 while (gen < Configuration.MaxGeneration && done == false)
                 {
+                    if (token.IsCancellationRequested)
+                    {
+                        // Clean up here, then...
+                        token.ThrowIfCancellationRequested();
+                    }
+
                     if (gen % 200 == 0)
                     {
                         Console.WriteLine("\nGeneration = " + gen);
@@ -77,7 +85,7 @@ namespace EvolutionOptimization.Managers
                     ++gen;
                 }
                 return bestSolution;
-            });
+            },token);
         } // Solve
 
         private IIndividual[] Select(int n, IIndividual[] population, double tau) // select n 'good' Individuals
