@@ -1,4 +1,4 @@
-﻿using GeneticAlgorithm.Interfaces;
+﻿using EvolutionOptimization.Interfaces;
 
 namespace EvolutionOptimization.Models
 {

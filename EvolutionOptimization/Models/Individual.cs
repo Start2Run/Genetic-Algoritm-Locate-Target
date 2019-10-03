@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using EvolutionOptimization.Helpers;
 using EvolutionOptimization.Interfaces;
-using GeneticAlgorithm.Interfaces;
 
 namespace EvolutionOptimization.Models
 {
-    public class Individual:IIndividual
+    public class Individual : IIndividual
     {
         private static readonly Random Rnd = new Random(0); // used by ctor
         private readonly Genome _target;
         private readonly double _refError;
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public List<IGenome> Chromosome { get; }
         public double Error => Helper.Error(this, _target, _refError);
         public int GenomeLength => Chromosome.Count;

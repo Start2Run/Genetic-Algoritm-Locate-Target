@@ -2,19 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using EvolutionOptimization.Helpers;
+using EvolutionOptimization.Interfaces;
 using EvolutionOptimization.Managers;
 using HelixToolkit.Wpf;
 using Viewer3D.Helpers;
@@ -27,7 +18,7 @@ namespace Viewer3D
     public partial class MainWindow : Window
     {
         private readonly Point3D _startPoint = new Point3D(0, 0, 0);
-        private readonly Point3D _targetPoint = new Point3D(-5, 4.6, 2.4);
+        private readonly Point3D _targetPoint = new Point3D(12, 10, -5);
 
         private ConcurrentDictionary<Guid, LinesVisual3D> Lines;
 
@@ -50,9 +41,37 @@ namespace Viewer3D
 
         private async void StartSelectionProcess()
         {
-            var evolv = new SolverManager(new[] { _targetPoint.X, _targetPoint.Y, _targetPoint.Z });
-            var bestSolution = await evolv.Solver();
-            var message = "Accuracy value at best solution = " + bestSolution.Error.ToString("F6") + " % ";
+            var manager = new SolverManager(new[] { _targetPoint.X, _targetPoint.Y, _targetPoint.Z });
+            manager.UpdateAction = UpdateView;
+            var bestSolution = await manager.Solver();
+            Console.WriteLine("Accuracy value at best solution = " + bestSolution.Error.ToString("F6") + " % ");
+        }
+
+        private void UpdateView(IEnumerable<IIndividual> collection)
+        {
+            var c = collection.ToArray();
+            MainView?.Dispatcher?.Invoke(() =>
+            {
+                var colors = new[] { Colors.Black, Colors.Green, Colors.Aqua, Colors.Blue, Colors.BlueViolet };
+
+                foreach (var item in Lines)
+                {
+                    MainView.Children.Remove(item.Value);
+                }
+
+                Lines.Clear();
+                for (var i = 0; i < 5; i++)
+                {
+                    var item = c[i];
+                    var line = ViewHelper.AddLine(item, _startPoint, _targetPoint, colors[i]);
+                    Lines.TryAdd(item.Id, line);
+                }
+
+                foreach (var item in Lines)
+                {
+                    MainView.Children.Add(item.Value);
+                }
+            });
         }
     }
 }

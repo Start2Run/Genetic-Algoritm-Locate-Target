@@ -1,4 +1,4 @@
-﻿namespace GeneticAlgorithm.Interfaces
+﻿namespace EvolutionOptimization.Interfaces
 {
     public interface IGenome
     {

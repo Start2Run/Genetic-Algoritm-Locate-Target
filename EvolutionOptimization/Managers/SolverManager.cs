@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ using EvolutionOptimization.Models;
 
 namespace EvolutionOptimization.Managers
 {
-    public class SolverManager
+    public class SolverManager:ISolverManager
     {
         private static readonly Random Rnd = new Random(0); // used by ctor
         private readonly double _refError;
         private Genome _targetGenome;
-
+        public Action<IEnumerable<IIndividual>> UpdateAction { get; set; }
         public SolverManager(double[] target)
         {
             Configuration.NumberOfGenes = target.Length;
@@ -28,8 +29,8 @@ namespace EvolutionOptimization.Managers
             return await Task.Run(() =>
             {
                 // assumes existence of an accessible Error function and a Individual class and a Random object rnd
-                var population = new Individual[Configuration.PopSize];
-                Individual bestSolution = null; // best solution found by any individual
+                var population = new IIndividual[Configuration.PopSize];
+                IIndividual bestSolution = null; // best solution found by any individual
                 var bestError = double.MaxValue; // smaller values better
 
                 // population initialization
@@ -50,6 +51,7 @@ namespace EvolutionOptimization.Managers
                     {
                         Console.WriteLine("\nGeneration = " + gen);
                         Console.WriteLine("Best error = " + bestError.ToString("F6"));
+                        UpdateAction?.Invoke(population.ToArray());
                     }
 
                     var parents = Select(2, population, Configuration.Tau); // pick 2 good (not necessarily best) Individuals
@@ -78,7 +80,7 @@ namespace EvolutionOptimization.Managers
             });
         } // Solve
 
-        private IIndividual[] Select(int n, Individual[] population, double tau) // select n 'good' Individuals
+        private IIndividual[] Select(int n, IIndividual[] population, double tau) // select n 'good' Individuals
         {
             // tau is selection pressure = % of population to grab
             var popSize = population.Length;
@@ -94,13 +96,13 @@ namespace EvolutionOptimization.Managers
 
             var tournSize = (int)(tau * popSize);
             if (tournSize < n) tournSize = n;
-            var candidates = new Individual[tournSize];
+            var candidates = new IIndividual[tournSize];
 
             for (var i = 0; i < tournSize; ++i)
                 candidates[i] = population[indexes[i]];
             Array.Sort(candidates);
 
-            var results = new Individual[n];
+            var results = new IIndividual[n];
             for (var i = 0; i < n; ++i)
                 results[i] = candidates[i];
 
@@ -154,7 +156,7 @@ namespace EvolutionOptimization.Managers
             return result;
         } // Reproduce
 
-        private static void Mutate(Individual child, double maxGene, double mutateRate, double mutateChange)
+        private static void Mutate(IIndividual child, double maxGene, double mutateRate, double mutateChange)
         {
             var hi = mutateChange * maxGene;
             var lo = -hi;
@@ -177,7 +179,7 @@ namespace EvolutionOptimization.Managers
             population[popSize - 2] = child2;
         }
 
-        private void Immigrate(Individual[] population, double minGene, double maxGene, double mutateRate, double mutateChange, Genome target)
+        private void Immigrate(IIndividual[] population, double minGene, double maxGene, double mutateRate, double mutateChange, Genome target)
         {
             // kill off third-worst Individual and replace with new Individual
             // assumes population is sorted
