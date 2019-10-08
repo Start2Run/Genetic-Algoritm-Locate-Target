@@ -4,7 +4,6 @@ using System.Threading;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
 using HelixToolkit.Wpf;
-using Viewer3D.Helpers;
 
 namespace Viewer3D.ViewModels
 {

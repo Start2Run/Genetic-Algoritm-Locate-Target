@@ -11,3 +11,9 @@ D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug
 D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.csproj.CoreCompileInputs.cache
 D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.exe
 D:\School\MachineLearning\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.pdb
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.exe.config
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.exe
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\bin\Debug\GeneticAlgorithm.pdb
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgoritm.csprojAssemblyReference.cache
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.exe
+C:\repos\geneticalgoritm_locatetarget\GeneticAlgoritm\obj\Debug\GeneticAlgorithm.pdb

@@ -13,9 +13,21 @@ namespace Viewer3D.ViewModels
     public partial class MainWindowViewModel
     {
         #region Commands
+
         public async void OnSettingsClickCommand()
         {
+            var view = new Controls.Views.ConfigurationView() { DataContext = new Controls.Configuration.ViewModels.ConfigurationViewModel() };
+            //show the dialog
+            var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog", ExtendedOpenedEventHandler, ExtendedClosingEventHandler);
+        }
 
+        private void ExtendedOpenedEventHandler(object sender, MaterialDesignThemes.Wpf.DialogOpenedEventArgs eventargs)
+        {
+            Console.WriteLine("You could intercept the open and affect the dialog using eventArgs.Session.");
+        }
+
+        private void ExtendedClosingEventHandler(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
+        {
         }
 
         public async void OnStartClickCommand()

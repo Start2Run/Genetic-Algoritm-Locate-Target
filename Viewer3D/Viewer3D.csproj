@@ -86,11 +86,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Configuration\ViewModels\ConfigurationViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModels\MainWindowViewModelMethods.cs" />
-    <Compile Include="ViewModels\MainWindowViewModelProperties.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="MainWindow\ViewModels\MainWindowViewModelMethods.cs" />
+    <Compile Include="MainWindow\ViewModels\MainWindowViewModelProperties.cs" />
+    <Compile Include="MainWindow\ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Controls\Configuration\Views\ConfigurationView.xaml.cs">
+      <DependentUpon>ConfigurationView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow\Views\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -99,10 +103,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\ViewHelper.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainWindow\Views\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\Configuration\Views\ConfigurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
