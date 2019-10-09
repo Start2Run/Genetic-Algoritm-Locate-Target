@@ -44,7 +44,11 @@
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
-    <h:HelixViewport3D Name="MainView">
-        <h:DefaultLights />
-    </h:HelixViewport3D>
+    <Grid>
+        <h:HelixViewport3D Name="MainView"
+                           Background="Black">
+            <h:DefaultLights />
+        </h:HelixViewport3D>
+        <Label Content="{Binding ElementName=This, Path=DataContext.Generation, FallbackValue='0'}"/>
+    </Grid>
 </controls:MetroWindow>

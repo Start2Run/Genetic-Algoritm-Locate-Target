@@ -52,14 +52,14 @@ namespace Viewer3D.ViewModels
             return bestSolution;
         }
 
-        private void UpdateView(IEnumerable<IIndividual> collection)
+        private void UpdateView(IEnumerable<IIndividual> collection, double error, int generation)
         {
             var c = collection.ToArray();
             _dispatcher?.Invoke(() =>
             {
                 try
                 {
-                    var colors = new[] { Colors.Black, Colors.Green, Colors.Aqua, Colors.Blue, Colors.BlueViolet };
+                    var colors = new[] { Colors.Brown, Colors.Green, Colors.Aqua, Colors.Blue, Colors.BlueViolet };
                     foreach (var item in _lines)
                     {
                         _view.Children.Remove(item.Value);

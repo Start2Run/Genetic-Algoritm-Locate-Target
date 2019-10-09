@@ -10,12 +10,12 @@ using EvolutionOptimization.Models;
 
 namespace EvolutionOptimization.Managers
 {
-    public class SolverManager:ISolverManager
+    public class SolverManager : ISolverManager
     {
         private static readonly Random Rnd = new Random(0); // used by ctor
         private readonly double _refError;
         private Genome _targetGenome;
-        public Action<IEnumerable<IIndividual>> UpdateAction { get; set; }
+        public Action<IEnumerable<IIndividual>, double, int> UpdateAction { get; set; }
         public SolverManager(double[] target)
         {
             Configuration.NumberOfGenes = target.Length;
@@ -59,7 +59,7 @@ namespace EvolutionOptimization.Managers
                     {
                         Console.WriteLine("\nGeneration = " + gen);
                         Console.WriteLine("Best error = " + bestError.ToString("F6"));
-                        UpdateAction?.Invoke(population.ToArray());
+                        UpdateAction?.Invoke(population.ToArray(), bestError, gen);
                     }
 
                     var parents = Select(2, population, Configuration.Tau); // pick 2 good (not necessarily best) Individuals
@@ -85,7 +85,7 @@ namespace EvolutionOptimization.Managers
                     ++gen;
                 }
                 return bestSolution;
-            },token);
+            }, token);
         } // Solve
 
         private IIndividual[] Select(int n, IIndividual[] population, double tau) // select n 'good' Individuals
@@ -124,7 +124,7 @@ namespace EvolutionOptimization.Managers
             var c = Rnd.Next(0, genomeLength - 1); // crossover point. 0 means 'between 0 and 1'.
             var cross = Rnd.Next(0, numGenes - 1); // crossover point. 0 means 'between 0 and 1'.
 
-            var child1 = new Individual(target,_refError); // random chromosome
+            var child1 = new Individual(target, _refError); // random chromosome
             for (var i = 1; i < parent2.GenomeLength; i++)
                 child1.IncreaseGenomeMemory();
 
