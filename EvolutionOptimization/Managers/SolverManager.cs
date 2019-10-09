@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EvolutionOptimization.Helpers;
 using EvolutionOptimization.Interfaces;
 using EvolutionOptimization.Models;
 
@@ -16,11 +15,13 @@ namespace EvolutionOptimization.Managers
         private readonly double _refError;
         private Genome _targetGenome;
         public Action<IEnumerable<IIndividual>, double, int> UpdateAction { get; set; }
-        public SolverManager(double[] target)
+        private readonly Configuration _config;
+        public SolverManager(double[] target, Configuration config)
         {
-            Configuration.NumberOfGenes = target.Length;
-            Configuration.Digits = Configuration.MutateChange.ToString(CultureInfo.InvariantCulture).Substring(Configuration.MutateChange.ToString(CultureInfo.InvariantCulture).IndexOf(".", StringComparison.Ordinal) + 1).Length;
-            _targetGenome = new Genome(Configuration.NumberOfGenes) { Genes = target };
+            _config = config;
+            _config.NumberOfGenes = target.Length;
+            _config.Digits = _config.MutateChange.ToString(CultureInfo.InvariantCulture).Substring(_config.MutateChange.ToString(CultureInfo.InvariantCulture).IndexOf(".", StringComparison.Ordinal) + 1).Length;
+            _targetGenome = new Genome(_config.NumberOfGenes) { Genes = target };
             var perfectIndividual = OptimalIndividual(_targetGenome);
             _refError = perfectIndividual.Error;
         }
@@ -31,14 +32,14 @@ namespace EvolutionOptimization.Managers
             {
                 token.ThrowIfCancellationRequested();
                 // assumes existence of an accessible Error function and a Individual class and a Random object rnd
-                var population = new IIndividual[Configuration.PopSize];
+                var population = new IIndividual[_config.PopSize];
                 IIndividual bestSolution = null; // best solution found by any individual
                 var bestError = double.MaxValue; // smaller values better
 
                 // population initialization
                 for (var i = 0; i < population.Length; ++i)
                 {
-                    population[i] = new Individual(_targetGenome, _refError);
+                    population[i] = new Individual(_targetGenome, _refError, _config);
                     if (!(population[i].Error < bestError)) continue;
                     bestError = population[i].Error;
                     bestSolution = population[i];
@@ -47,7 +48,7 @@ namespace EvolutionOptimization.Managers
                 // process
                 var gen = 0;
                 bool done = false;
-                while (gen < Configuration.MaxGeneration && done == false)
+                while (gen < _config.MaxGeneration && done == false)
                 {
                     if (token.IsCancellationRequested)
                     {
@@ -62,22 +63,22 @@ namespace EvolutionOptimization.Managers
                         UpdateAction?.Invoke(population.ToArray(), bestError, gen);
                     }
 
-                    var parents = Select(2, population, Configuration.Tau); // pick 2 good (not necessarily best) Individuals
-                    var children = Reproduce(parents[0], parents[1], Configuration.MinX, Configuration.MaxX, Configuration.MutateRate,
-                        Configuration.MutateChange, _targetGenome); // create 2 children
+                    var parents = Select(2, population, _config.Tau); // pick 2 good (not necessarily best) Individuals
+                    var children = Reproduce(parents[0], parents[1], _config.MinX, _config.MaxX, _config.MutateRate,
+                        _config.MutateChange, _targetGenome); // create 2 children
                     Place(children[0], children[1], population); // sort pop, replace two worst with new children
-                    Immigrate(population, Configuration.MinX, Configuration.MaxX, Configuration.MutateRate, Configuration.MutateChange,
+                    Immigrate(population, _config.MinX, _config.MaxX, _config.MutateRate, _config.MutateChange,
                         _targetGenome); // bring in a random Individual
 
-                    for (var i = Configuration.PopSize - 3; i < Configuration.PopSize; ++i) // check the 3 new Individuals
+                    for (var i = _config.PopSize - 3; i < _config.PopSize; ++i) // check the 3 new Individuals
                     {
                         for (var j = population[i].GenomeLength - 1; j >= 0; j--)
-                            if (population[i].Chromosome[j].Genes.SequenceEqual((new Genome(Configuration.NumberOfGenes)).Genes))
+                            if (population[i].Chromosome[j].Genes.SequenceEqual((new Genome(_config.NumberOfGenes)).Genes))
                                 population[i].Chromosome.RemoveAt(j);
                         if (!(population[i].Error < bestError)) continue;
                         bestError = population[i].Error;
                         bestSolution = population[i];
-                        if (!(bestError <= Configuration.ExitError)) continue;
+                        if (!(bestError <= _config.ExitError)) continue;
                         done = true;
                         Console.WriteLine("\n Early exit at generation " + gen);
                     }
@@ -119,16 +120,16 @@ namespace EvolutionOptimization.Managers
 
         private IIndividual[] Reproduce(IIndividual parent1, IIndividual parent2, double minGene, double maxGene, double mutateRate, double mutateChange, Genome target) // crossover and mutation
         {
-            var numGenes = Configuration.NumberOfGenes;
+            var numGenes = _config.NumberOfGenes;
             var genomeLength = Math.Min(parent1.GenomeLength, parent2.GenomeLength);
             var c = Rnd.Next(0, genomeLength - 1); // crossover point. 0 means 'between 0 and 1'.
             var cross = Rnd.Next(0, numGenes - 1); // crossover point. 0 means 'between 0 and 1'.
 
-            var child1 = new Individual(target, _refError); // random chromosome
+            var child1 = new Individual(target, _refError, _config); // random chromosome
             for (var i = 1; i < parent2.GenomeLength; i++)
                 child1.IncreaseGenomeMemory();
 
-            var child2 = new Individual(target, _refError);
+            var child2 = new Individual(target, _refError, _config);
             for (var i = 1; i < parent1.GenomeLength; i++)
                 child2.IncreaseGenomeMemory();
 
@@ -146,10 +147,10 @@ namespace EvolutionOptimization.Managers
                     child1.Chromosome[i].Genes[j] = parent2.Chromosome[i].Genes[j];
 
             for (var i = child1.GenomeLength - 1; i >= 0; i--)
-                if (child1.Chromosome[i].Genes.SequenceEqual((new Genome(Configuration.NumberOfGenes)).Genes))
+                if (child1.Chromosome[i].Genes.SequenceEqual((new Genome(_config.NumberOfGenes)).Genes))
                     child1.Chromosome.RemoveAt(i);
             for (var i = child2.GenomeLength - 1; i >= 0; i--)
-                if (child2.Chromosome[i].Genes.SequenceEqual((new Genome(Configuration.NumberOfGenes)).Genes))
+                if (child2.Chromosome[i].Genes.SequenceEqual((new Genome(_config.NumberOfGenes)).Genes))
                     child2.Chromosome.RemoveAt(i);
 
             if (child1.Error >= Math.Min(parent1.Error, parent2.Error)) child1.IncreaseGenomeMemory();
@@ -164,13 +165,13 @@ namespace EvolutionOptimization.Managers
             return result;
         } // Reproduce
 
-        private static void Mutate(IIndividual child, double maxGene, double mutateRate, double mutateChange)
+        private void Mutate(IIndividual child, double maxGene, double mutateRate, double mutateChange)
         {
             var hi = mutateChange * maxGene;
             var lo = -hi;
             if (child.GenomeLength < 1) child.IncreaseGenomeMemory();
             var c = Rnd.Next(0, child.GenomeLength);
-            for (var i = 0; i < Configuration.NumberOfGenes; ++i)
+            for (var i = 0; i < _config.NumberOfGenes; ++i)
             {
                 if (!(Rnd.NextDouble() < mutateRate)) continue;
                 var delta = child.GetRnd(lo, hi);//(hi - lo) * rnd.NextDouble() + lo;
@@ -191,22 +192,22 @@ namespace EvolutionOptimization.Managers
         {
             // kill off third-worst Individual and replace with new Individual
             // assumes population is sorted
-            var immigrant = new Individual(target, _refError);
+            var immigrant = new Individual(target, _refError, _config);
             var popSize = population.Length;
             population[popSize - 3] = immigrant; // replace third worst individual
         }
 
         private IIndividual OptimalIndividual(Genome target)
         {
-            var perfectIndividual = new Individual(target, _refError);
+            var perfectIndividual = new Individual(target, _refError, _config);
             perfectIndividual.Chromosome.Clear();
-            var n = (int)(target.Genes.Max(gene => Math.Abs(gene) / Configuration.MutateChange));
+            var n = (int)(target.Genes.Max(gene => Math.Abs(gene) / _config.MutateChange));
             for (var i = 0; i < n; i++)
             {
                 perfectIndividual.IncreaseGenomeMemory(true);
-                for (var j = 0; j < Configuration.NumberOfGenes; j++)
+                for (var j = 0; j < _config.NumberOfGenes; j++)
                 {
-                    var ratio = Math.Sign(target.Genes[j]) < 0 ? Math.Abs(Configuration.MinX) : Math.Abs(Configuration.MaxX);
+                    var ratio = Math.Sign(target.Genes[j]) < 0 ? Math.Abs(_config.MinX) : Math.Abs(_config.MaxX);
                     if (Math.Abs(target.Genes[j]) > Math.Abs(ratio * (i + 1)))
                         perfectIndividual.Chromosome[i].Genes[j] = Math.Sign(target.Genes[j]) * ratio;
                     else if (Math.Abs(target.Genes[j]) - ratio * i > 0)
@@ -215,7 +216,7 @@ namespace EvolutionOptimization.Managers
             }
 
             for (var i = perfectIndividual.GenomeLength - 1; i >= 0; i--)
-                if (perfectIndividual.Chromosome[i].Genes.SequenceEqual((new Genome(Configuration.NumberOfGenes)).Genes))
+                if (perfectIndividual.Chromosome[i].Genes.SequenceEqual((new Genome(_config.NumberOfGenes)).Genes))
                     perfectIndividual.Chromosome.RemoveAt(i);
 
             return perfectIndividual;

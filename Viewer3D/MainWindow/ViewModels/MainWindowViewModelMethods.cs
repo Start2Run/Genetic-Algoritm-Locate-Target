@@ -6,9 +6,12 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using EvolutionOptimization.Interfaces;
 using EvolutionOptimization.Managers;
+using MaterialDesignThemes.Wpf;
+using Viewer3D.Controls.Configuration.ViewModels;
+using Viewer3D.Controls.Configuration.Views;
 using Viewer3D.Helpers;
 
-namespace Viewer3D.ViewModels
+namespace Viewer3D.MainWindow.ViewModels
 {
     public partial class MainWindowViewModel
     {
@@ -16,25 +19,20 @@ namespace Viewer3D.ViewModels
 
         public async void OnSettingsClickCommand()
         {
-            var view = new Controls.Views.ConfigurationView() { DataContext = new Controls.Configuration.ViewModels.ConfigurationViewModel() };
-            //show the dialog
-            var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog", ExtendedOpenedEventHandler, ExtendedClosingEventHandler);
+            IsConfigurationWindowOpen = true;
         }
 
-        private void ExtendedOpenedEventHandler(object sender, MaterialDesignThemes.Wpf.DialogOpenedEventArgs eventargs)
+        private void OnCloseDialogHostCommand(DialogClosingEventArgs eventArgs)
         {
-            Console.WriteLine("You could intercept the open and affect the dialog using eventArgs.Session.");
-        }
-
-        private void ExtendedClosingEventHandler(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
-        {
+            if (eventArgs?.Parameter.ToString() == false.ToString()) return;
+            _config = ((eventArgs?.Session?.Content as ConfigurationView)?.DataContext as ConfigurationViewModel)?.Config;
         }
 
         public async void OnStartClickCommand()
         {
             IsSettingsBtnEnabled = false;
             IsStartBtnEnabled = false;
-            var result = await StartSelectionProcess(TargetPoint);
+            await StartSelectionProcess(TargetPoint);
         }
 
         public void OnCloseWindowClickCommand()
@@ -45,7 +43,7 @@ namespace Viewer3D.ViewModels
         #endregion
         private async Task<IIndividual> StartSelectionProcess(Point3D target)
         {
-            var manager = new SolverManager(new[] { target.X, target.Y, target.Z }) { UpdateAction = UpdateView };
+            var manager = new SolverManager(new[] { target.X, target.Y, target.Z }, _config) { UpdateAction = UpdateView };
 
             IIndividual bestSolution = null;
             try

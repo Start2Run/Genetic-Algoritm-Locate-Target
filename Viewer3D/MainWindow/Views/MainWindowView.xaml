@@ -10,12 +10,14 @@
                        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                        xmlns:materialDesignConverters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+                       xmlns:command="http://www.galasoft.ch/mvvmlight"
                        BorderThickness="2"
                        GlowBrush="{DynamicResource AccentColorBrush}"
                        WindowStartupLocation="CenterScreen"
+                       WindowState="Maximized"
                        mc:Ignorable="d"
-                       Title="MainWindow"
-                       Height="450"
+                       Title="Genetic Algorithm"
+                       Height="1024"
                        Width="800"
                        Name="This">
     <i:Interaction.Triggers>
@@ -25,8 +27,9 @@
     </i:Interaction.Triggers>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Command="{Binding ElementName=This, Path=DataContext.SettingsClickCommand}"
-                    IsEnabled="{Binding ElementName=This, Path=DataContext.IsSettingsBtnEnabled}">
+            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                    Command="{Binding SettingsClickCommand}"
+                    IsEnabled="{Binding IsSettingsBtnEnabled}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
@@ -34,8 +37,9 @@
                                Foreground="DarkRed" />
                 </StackPanel>
             </Button>
-            <Button Command="{Binding ElementName=This, Path=DataContext.StartClickCommand}"
-                    IsEnabled="{Binding ElementName=This, Path=DataContext.IsStartBtnEnabled}">
+            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                    Command="{Binding StartClickCommand}"
+                    IsEnabled="{Binding IsStartBtnEnabled}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
@@ -46,11 +50,29 @@
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
-    <Grid>
-        <h:HelixViewport3D Name="MainView"
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <h:HelixViewport3D Grid.Row="0" Name="MainView"
                            Background="Black">
             <h:DefaultLights />
         </h:HelixViewport3D>
-        <Label Content="{Binding ElementName=This, Path=DataContext.Generation, FallbackValue='0'}"/>
+        <!--<Label Content="{Binding Generation, FallbackValue='0'}" />-->
+        <materialDesign:DialogHost Grid.Row="1" Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   IsOpen="{Binding IsConfigurationWindowOpen}"
+                                   DialogContent="{Binding DialogHostContent}"
+                                   CloseOnClickAway="True"
+                                   Visibility="{Binding IsSettingsBtnEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="DialogClosing">
+                    <command:EventToCommand  Command="{Binding CloseDialogHostCommand}"
+                                             PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </materialDesign:DialogHost>
     </Grid>
 </controls:MetroWindow>

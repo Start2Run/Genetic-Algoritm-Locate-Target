@@ -11,15 +11,17 @@ namespace EvolutionOptimization.Models
         private static readonly Random Rnd = new Random(0); // used by ctor
         private readonly Genome _target;
         private readonly double _refError;
+        private IConfiguration _config;
         public Guid Id { get; set; } = Guid.NewGuid();
         public List<IGenome> Chromosome { get; }
-        public double Error => Helper.Error(this, _target, _refError);
+        public double Error => Helper.Error(this, _target, _refError, _config);
         public int GenomeLength => Chromosome.Count;
 
-        public Individual(Genome target, double refError)
+        public Individual(Genome target, double refError, IConfiguration config)
         {
             _target = target;
             _refError = refError;
+            _config = config;
 
             Chromosome = new List<IGenome>();
 
@@ -47,17 +49,17 @@ namespace EvolutionOptimization.Models
 
         public double GetRnd(double min, double max)
         {
-            if (Configuration.HasDoubleValues) return Math.Round((max - min) * Rnd.NextDouble() + min, Configuration.Digits);
+            if (_config.HasDoubleValues) return Math.Round((max - min) * Rnd.NextDouble() + min, _config.Digits);
             return Rnd.Next((int)min, (int)max + 1);
         }
 
         public void IncreaseGenomeMemory(bool empty = false)
         {
-            Chromosome.Add(new Genome(Configuration.NumberOfGenes));
+            Chromosome.Add(new Genome(_config.NumberOfGenes));
             if (empty) return;
             for (var i = 0; i < Chromosome.Last().Genes.Count(); i++)
             {
-                Chromosome.Last().Genes[i] = GetRnd(Configuration.MinX, Configuration.MaxX);
+                Chromosome.Last().Genes[i] = GetRnd(_config.MinX, _config.MaxX);
             }
         }
     }

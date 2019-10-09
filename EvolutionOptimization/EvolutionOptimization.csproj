@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Configuration.cs" />
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\IConfiguration.cs" />
     <Compile Include="Models\Individual.cs" />
     <Compile Include="Managers\SolverManager.cs" />
     <Compile Include="Interfaces\ISolverManager.cs" />

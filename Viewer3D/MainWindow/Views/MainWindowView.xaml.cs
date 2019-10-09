@@ -1,4 +1,4 @@
-﻿using Viewer3D.ViewModels;
+﻿using Viewer3D.MainWindow.ViewModels;
 
 namespace Viewer3D.MainWindow.Views
 {

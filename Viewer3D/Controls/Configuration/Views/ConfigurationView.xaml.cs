@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Viewer3D.Controls.Views
+namespace Viewer3D.Controls.Configuration.Views
 {
     /// <summary>
     /// Interaction logic for ConfigurationView.xaml
