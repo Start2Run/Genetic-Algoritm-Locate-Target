@@ -1,15 +1,15 @@
 ﻿using Viewer3D.ViewModels;
 
-namespace Viewer3D
+namespace Viewer3D.MainWindow.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindowView
     {
         private MainWindowViewModel _viewModel;
 
-        public MainWindow()
+        public MainWindowView()
         {
             _viewModel = new MainWindowViewModel();
             DataContext = _viewModel;
