@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using EvolutionOptimization.Interfaces;
 using EvolutionOptimization.Models;
 using GalaSoft.MvvmLight.CommandWpf;
 using Viewer3D.Annotations;
@@ -148,6 +149,17 @@ namespace Viewer3D.Controls.Configuration.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public int RefreshInterval
+        {
+            get => Config.RefreshInterval; set
+            {
+                if (Math.Abs(Config.RefreshInterval - value) < Tolerance) return;
+                Config.RefreshInterval = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region Constructor

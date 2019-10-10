@@ -31,6 +31,9 @@ namespace Viewer3D.MainWindow.ViewModels
         private bool _isSettingsBtnEnabled = true;
         private bool _isStartBtnEnabled = true;
         private bool _isConfigurationWindowOpen;
+        private int _generations;
+        private double _bestError;
+
         private Configuration _config;
 
         public System.Windows.Controls.UserControl DialogHostContent { get; set; }
@@ -67,6 +70,28 @@ namespace Viewer3D.MainWindow.ViewModels
             {
                 if (_isConfigurationWindowOpen == value) return;
                 _isConfigurationWindowOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Generations
+        {
+            get => _generations;
+            set
+            {
+                if (_generations == value) return;
+                _generations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double BestError
+        {
+            get => _bestError;
+            set
+            {
+                if (_bestError == value) return;
+                _bestError = value;
                 OnPropertyChanged();
             }
         }

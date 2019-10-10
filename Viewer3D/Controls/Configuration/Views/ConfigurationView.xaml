@@ -62,6 +62,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -283,6 +284,25 @@
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Right"
                          Text="{Binding ExitError}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewTextInput">
+                            <command:EventToCommand  Command="{Binding PreviewTextInputForDoublesCommand}"
+                                                     PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+
+                <TextBlock Grid.Row="12"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           Text="Refresh interval[generations]" />
+                <TextBox Grid.Row="12"
+                         Grid.Column="2"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Stretch"
+                         HorizontalContentAlignment="Right"
+                         Text="{Binding RefreshInterval}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PreviewTextInput">
                             <command:EventToCommand  Command="{Binding PreviewTextInputForDoublesCommand}"

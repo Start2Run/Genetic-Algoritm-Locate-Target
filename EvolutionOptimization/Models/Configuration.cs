@@ -1,4 +1,6 @@
-﻿namespace EvolutionOptimization.Models
+﻿using EvolutionOptimization.Interfaces;
+
+namespace EvolutionOptimization.Models
 {
     public class Configuration: IConfiguration
     {
@@ -14,5 +16,6 @@
         public double Tau { get; set; } = 0.40; // selection pressure (percent pop selected for tournament selection) (0.3-0.7)
         public int MaxGeneration { get; set; } = 100000; // loop counter
         public double ExitError { get; set; } = 1;
+        public int RefreshInterval { get; set; } = 1; // The generations interval after witch to refresh the UI
     }
 }

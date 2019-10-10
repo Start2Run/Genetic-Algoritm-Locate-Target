@@ -28,7 +28,7 @@ namespace EvolutionOptimization.Managers
 
         public async Task<IIndividual> Solver(CancellationToken token)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async() =>
             {
                 token.ThrowIfCancellationRequested();
                 // assumes existence of an accessible Error function and a Individual class and a Random object rnd
@@ -56,11 +56,12 @@ namespace EvolutionOptimization.Managers
                         token.ThrowIfCancellationRequested();
                     }
 
-                    if (gen % 200 == 0)
+                    if (gen % _config.RefreshInterval == 0)
                     {
                         Console.WriteLine("\nGeneration = " + gen);
                         Console.WriteLine("Best error = " + bestError.ToString("F6"));
                         UpdateAction?.Invoke(population.ToArray(), bestError, gen);
+                        await Task.Delay(500, token);
                     }
 
                     var parents = Select(2, population, _config.Tau); // pick 2 good (not necessarily best) Individuals

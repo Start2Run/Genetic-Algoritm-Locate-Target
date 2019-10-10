@@ -17,7 +17,7 @@ namespace Viewer3D.MainWindow.ViewModels
     {
         #region Commands
 
-        public async void OnSettingsClickCommand()
+        public void OnSettingsClickCommand()
         {
             IsConfigurationWindowOpen = true;
         }
@@ -69,6 +69,8 @@ namespace Viewer3D.MainWindow.ViewModels
             {
                 try
                 {
+                    Generations = generation;
+                    BestError = error;
                     var colors = new[] { Colors.Brown, Colors.Green, Colors.Aqua, Colors.Blue, Colors.BlueViolet };
                     foreach (var item in _lines)
                     {

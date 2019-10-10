@@ -51,22 +51,13 @@
     </controls:MetroWindow.RightWindowCommands>
 
     <Grid Background="Black">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <h:HelixViewport3D Grid.Row="0" Name="MainView"
-                           Background="Black">
-            <h:DefaultLights />
-        </h:HelixViewport3D>
-        <!--<Label Content="{Binding Generation, FallbackValue='0'}" />-->
-        <materialDesign:DialogHost Grid.Row="1" Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
+        <materialDesign:DialogHost Panel.ZIndex="1"
+                                   Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch"
                                    IsOpen="{Binding IsConfigurationWindowOpen}"
                                    DialogContent="{Binding DialogHostContent}"
-                                   CloseOnClickAway="True"
-                                   Visibility="{Binding IsSettingsBtnEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                   CloseOnClickAway="True">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="DialogClosing">
                     <command:EventToCommand  Command="{Binding CloseDialogHostCommand}"
@@ -74,5 +65,68 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </materialDesign:DialogHost>
+
+        <h:HelixViewport3D Panel.ZIndex="0"
+                           HorizontalContentAlignment="Stretch"
+                           VerticalContentAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           Name="MainView"
+                           Background="Black">
+            <h:DefaultLights />
+        </h:HelixViewport3D>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Background="LightGray"
+                    Margin="10,20,0,0"
+                    Panel.ZIndex="2">
+            <Grid Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="2px" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2px" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Content="Generations"
+                       Width="120"
+                       Background="PaleVioletRed"
+                       FontSize="20" />
+                <DockPanel  Grid.Row="0"
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            Background="PaleVioletRed">
+                    <Label Content="{Binding Generations, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}"
+                           MaxWidth="120"
+                           FontSize="20"
+                           Background="PaleVioletRed"
+                           HorizontalAlignment="Right" />
+                </DockPanel>
+
+                <Label Grid.Row="2"
+                       Grid.Column="0"
+                       Content="Best error"
+                       Width="120"
+                       Background="PaleVioletRed"
+                       FontSize="20" />
+                <DockPanel  Grid.Row="2"
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            Background="PaleVioletRed">
+                    <Label Content="{Binding BestError, UpdateSourceTrigger=PropertyChanged, FallbackValue=0}"
+                           MaxWidth="120"
+                           FontSize="20"
+                           Background="PaleVioletRed"
+                           HorizontalAlignment="Right" />
+                </DockPanel>
+            </Grid>
+        </StackPanel>
     </Grid>
 </controls:MetroWindow>
