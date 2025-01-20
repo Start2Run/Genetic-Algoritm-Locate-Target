@@ -1,4 +1,4 @@
-Title:  Genetic Pathfinder (or similar catchy name)
+Title:  Genetic Evolution Pathfinder
 Short Description:
 Visualize the power of genetic algorithms! This WPF application demonstrates how a population of virtual "creatures" evolves to find the optimal path from a starting point to a target. Watch as generations learn and adapt to navigate obstacles and discover the shortest route.
 Detailed Description:
